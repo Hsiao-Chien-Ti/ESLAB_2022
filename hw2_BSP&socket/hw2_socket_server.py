@@ -25,40 +25,76 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             obj = json.loads(data)
             t = obj['s']
             
-            plot.subplot(2, 3, 1)
-            plot.scatter(t, obj['x'], c='blue') # x, y, z, gx, gy, gz
+            plot.subplot(4, 3, 1)
+            plot.scatter(t, obj['temperature'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
             plot.xlabel("sample num")
-            plot.ylabel("x")
-            plot.title("x vs sample num")
+            plot.ylabel("temperature")
+            plot.title("temperature vs sample num")
             
-            plot.subplot(2, 3, 2)
-            plot.scatter(t, obj['y'], c='blue') # x, y, z, gx, gy, gz
+            plot.subplot(4, 3, 2)
+            plot.scatter(t, obj['humidity'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
             plot.xlabel("sample num")
-            plot.ylabel("y")
-            plot.title("y vs sample num")
+            plot.ylabel("humidity")
+            plot.title("humidity vs sample num")
             
-            plot.subplot(2, 3, 3)
-            plot.scatter(t, obj['z'], c='blue') # x, y, z, gx, gy, gz
+            plot.subplot(4, 3, 3)
+            plot.scatter(t, obj['pressure'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
             plot.xlabel("sample num")
-            plot.ylabel("z")
-            plot.title("z vs sample num")
+            plot.ylabel("pressure")
+            plot.title("pressure vs sample num")
             
-            plot.subplot(2, 3, 4)
-            plot.scatter(t, obj['gx'], c='blue') # x, y, z, gx, gy, gz
+            plot.subplot(4, 3, 4)
+            plot.scatter(t, obj['magnetox'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
             plot.xlabel("sample num")
-            plot.ylabel("gx")
-            plot.title("gx vs sample num")
+            plot.ylabel("magnetox")
+            plot.title("magnetox vs sample num")
             
-            plot.subplot(2, 3, 5)
-            plot.scatter(t, obj['gy'], c='blue') # x, y, z, gx, gy, gz
+            plot.subplot(4, 3, 5)
+            plot.scatter(t, obj['magnetoy'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
             plot.xlabel("sample num")
-            plot.ylabel("gy")
-            plot.title("gy vs sample num")
+            plot.ylabel("magnetoy")
+            plot.title("magnetoy vs sample num")
             
-            plot.subplot(2, 3, 6)
-            plot.scatter(t, obj['gz'], c='blue') # x, y, z, gx, gy, gz
+            plot.subplot(4, 3, 6)
+            plot.scatter(t, obj['magnetoz'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
             plot.xlabel("sample num")
-            plot.ylabel("gz")
-            plot.title("gz vs sample num")
+            plot.ylabel("magnetoz")
+            plot.title("magnetoz vs sample num")
             
-            plot.pause(0.1)
+            plot.subplot(4, 3, 7)
+            plot.scatter(t, obj['gyrox'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
+            plot.xlabel("sample num")
+            plot.ylabel("gyrox")
+            plot.title("gyrox vs sample num")
+            
+            plot.subplot(4, 3, 8)
+            plot.scatter(t, obj['gyroy'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
+            plot.xlabel("sample num")
+            plot.ylabel("gyroy")
+            plot.title("gyroy vs sample num")
+            
+            plot.subplot(4, 3, 9)
+            plot.scatter(t, obj['gyroz'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
+            plot.xlabel("sample num")
+            plot.ylabel("gyroz")
+            plot.title("gyroz vs sample num")
+            
+            plot.subplot(4, 3, 10)
+            plot.scatter(t, obj['accelerox'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
+            plot.xlabel("sample num")
+            plot.ylabel("accelerox")
+            plot.title("accelerox vs sample num")
+            
+            plot.subplot(4, 3, 11)
+            plot.scatter(t, obj['acceleroy'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
+            plot.xlabel("sample num")
+            plot.ylabel("acceleroy")
+            plot.title("acceleroy vs sample num")
+            
+            plot.subplot(4, 3, 12)
+            plot.scatter(t, obj['acceleroz'], c='blue') # temperature, humidity, pressure, magnetox, magnetoy, magnetoz, gyrox, gyroy, gyroz, accelerox, acceleroy, acceleroz
+            plot.xlabel("sample num")
+            plot.ylabel("acceleroz")
+            plot.title("acceleroz vs sample num")
+            
+            plot.pause(1)
