@@ -25,6 +25,7 @@
 #include "stm32l475e_iot01_accelero.h"
 #include <cstdint>
 #include <cstdio>
+#include "Sensor.h"
 
 #if MBED_CONF_APP_USE_TLS_SOCKET
 #include "root_ca_cert.h"
@@ -43,8 +44,6 @@ class SocketDemo {
 #else
     static constexpr size_t REMOTE_PORT = 65431; // standard HTTP port
 #endif // MBED_CONF_APP_USE_TLS_SOCKET
-    int16_t pDataXYZ[3] = {0};
-    int16_t sample_num=0;
 public:
     SocketDemo() : _net(NetworkInterface::get_default_instance())
     {
@@ -134,14 +133,19 @@ public:
         // }
 
         printf("Demo concluded successfully \r\n");
-        BSP_ACCELERO_Init();
+        std::map<std::string,float>sensorData;
+        Sensor sensor;
+        int16_t sample_num=0;
         while (1){
             ++sample_num;
-            char acc_json[100];
-            BSP_ACCELERO_AccGetXYZ(pDataXYZ);
-            float x = pDataXYZ[0], y = pDataXYZ[1], z = pDataXYZ[2];
-            nsapi_size_t len = sprintf(acc_json,"{\"x\":%f,\"y\":%f,\"z\":%f,\"s\":%d}",(float)((int)(x*10000))/10000,
-            (float)((int)(y*10000))/10000, (float)((int)(z*10000))/10000, sample_num);
+            char acc_json[300];
+            sensor.readSensor(sensorData);
+            nsapi_size_t len = sprintf(acc_json,"{\"temperature\":%f,\"humidity\":%f,\"pressure\":%f,\n\"magnetox\":%f,\"magnetoy\":%f,\"magnetoz\":%f,\n\"gyrox\":%f,\"gyroy\":%f,\"gyroz\":%f,\n\"accelerox\":%f,\"acceleroy\":%f,\"acceleroz\":%f,\"s\":%d}",
+            (float)((int)(sensorData["Temperature"]*10000))/10000, (float)((int)(sensorData["Humidity"]*10000))/10000, (float)((int)(sensorData["Pressure"]*10000))/10000,
+            (float)((int)(sensorData["MAGNETO_X"]*10000))/10000, (float)((int)(sensorData["MAGNETO_Y"]*10000))/10000, (float)((int)(sensorData["MAGNETO_Z"]*10000))/10000,
+            (float)((int)(sensorData["GYRO_X"]*10000))/10000, (float)((int)(sensorData["GYRO_Y"]*10000))/10000,(float)((int)(sensorData["GYRO_Z"]*10000))/10000,
+            (float)((int)(sensorData["ACCELERO_X"]*10000))/10000, (float)((int)(sensorData["ACCELERO_Y"]*10000))/10000,(float)((int)(sensorData["ACCELERO_Z"]*10000))/10000,
+            sample_num);
             printf("\r\nSending message: \r\n%s", acc_json);
             while(len)
             {
