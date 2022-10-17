@@ -8,6 +8,8 @@ class ScanDelegate(DefaultDelegate):
             print ("Discovered device", dev.addr)
         elif isNewData:
             print ("Received new data from", dev.addr)
+    def handleNotification(self, cHandle, data):
+        print(data)
 scanner = Scanner().withDelegate(ScanDelegate())
 devices = scanner.scan (10.0)
 n=0
@@ -38,6 +40,17 @@ try:
     ch= dev.getCharacteristics(uuid =UUID(0xfff1))[0]
     if (ch.supportsRead()):
         print (ch.read())
+
+    cccd=dev.getCharacteristics(uuid =UUID(0xfff4))[0]
+    notify = cccd.getDescriptors(forUUID=UUID(0x2902))[0]
+    notify.write(b"\x00\x01",True)
+    dev.waitForNotifications(100000)
+    if (cccd.supportsRead()):
+        print (cccd.read())
+        print('I am notified!')
+
+    
+
 #
 finally:
     dev.disconnect()
