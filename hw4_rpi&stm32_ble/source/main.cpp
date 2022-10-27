@@ -22,6 +22,7 @@
 #include "pretty_printer.h"
 #include "mbed-trace/mbed_trace.h"
 #include "MagnetoService.h"
+#include "stm32l475e_iot01_magneto.h"
 
 using namespace std::literals::chrono_literals;
 
@@ -37,8 +38,10 @@ public:
         _heartrate_uuid(GattService::UUID_HEART_RATE_SERVICE),
         _heartrate_value(100),
         _heartrate_service(ble, _heartrate_value, HeartRateService::LOCATION_FINGER),
-        _magneto_X_value(-307),
-        _magneto_X_service(ble, _magneto_X_value, MagnetoService::MAGNETO_X),
+        pDataXYZ{0,0,0},
+        _magneto_X_service(ble, pDataXYZ[0], MagnetoService::MAGNETO_X,0x1234),
+        _magneto_Y_service(ble, pDataXYZ[1], MagnetoService::MAGNETO_Y,0x1240),
+        _magneto_Z_service(ble, pDataXYZ[2], MagnetoService::MAGNETO_Z,0x1246),
         _adv_data_builder(_adv_buffer)
     {
     }
@@ -46,7 +49,7 @@ public:
     void start()
     {
         _ble.init(this, &HeartrateDemo::on_init_complete);
-
+        BSP_MAGNETO_Init();
         _event_queue.dispatch_forever();
     }
 
@@ -132,10 +135,12 @@ private:
         if (_heartrate_value == 10) {
             _heartrate_value = -30;
         }
-        _magneto_X_value++;
+        BSP_MAGNETO_GetXYZ(pDataXYZ);
 
         _heartrate_service.updateHeartRate(_heartrate_value);
-        _magneto_X_service.updateMagnetoValue(_magneto_X_value);
+        _magneto_X_service.updateMagnetoValue(pDataXYZ[0]);
+        _magneto_Y_service.updateMagnetoValue(pDataXYZ[1]);
+        _magneto_Z_service.updateMagnetoValue(pDataXYZ[2]);
     }
 
     /* these implement ble::Gap::EventHandler */
@@ -167,9 +172,11 @@ private:
 
     UUID _heartrate_uuid;
     uint16_t _heartrate_value;
-    int16_t _magneto_X_value;
+    int16_t pDataXYZ[3] = {0};
     HeartRateService _heartrate_service;
     MagnetoService _magneto_X_service;
+    MagnetoService _magneto_Y_service;
+    MagnetoService _magneto_Z_service;
 
     uint8_t _adv_buffer[ble::LEGACY_ADVERTISING_MAX_SIZE];
     ble::AdvertisingDataBuilder _adv_data_builder;

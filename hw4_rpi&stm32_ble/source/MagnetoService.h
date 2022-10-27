@@ -24,6 +24,8 @@
 #include "ble/Gap.h"
 #include "ble/GattServer.h"
 #include "cstdio"
+#include <cstdint>
+#include <stdint.h>
 #if BLE_FEATURE_GATT_SERVER
 
 /**
@@ -97,22 +99,22 @@ public:
      * @param[in] value get from the magneto
      * @param[in] axis of the magneto
      */
-    MagnetoService(BLE &_ble, int16_t magnetoCounter, SensorAxis axis) :
+    MagnetoService(BLE &_ble, int16_t magnetoCounter, SensorAxis axis, uint16_t UUID) :
         ble(_ble),
         valueBytes(magnetoCounter),
         magnetoValue(
-            0x1234,
+            UUID+1,
             valueBytes.getPointer(),
             valueBytes.getNumValueBytes(),
             MagnetoValueBytes::MAX_VALUE_BYTES,
             GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ
         ),
         magnetoAxis(
-            0x1235,
+            UUID+2,
             reinterpret_cast<uint8_t*>(&axis)
         )
     {
-        setupService();
+        setupService(UUID);
     }
 
     /**
@@ -141,13 +143,13 @@ protected:
     /**
      * Construct and add to the GattServer the heart rate service.
      */
-    void setupService() {
+    void setupService(uint16_t UUID) {
         GattCharacteristic *charTable[] = {
             &magnetoValue,
             &magnetoAxis
         };
         GattService magnetoService(
-            0xff01,
+            UUID,
             charTable,
             sizeof(charTable) / sizeof(charTable[0])
         );
